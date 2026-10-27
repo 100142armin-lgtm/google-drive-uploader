@@ -807,13 +807,16 @@ class ModernUploaderApp(BaseClass):
         raw = event.data
         if not raw:
             return
-        # 处理 Windows 带括号和空格的文件路径
+        # 优先使用 Tk 原生 splitlist 解析带空格与大括号的文件路径，兼容多种拖拽规范
         paths = []
-        if "{" in raw:
-            import re
-            paths = re.findall(r'\{([^}]+)\}', raw)
-        else:
-            paths = raw.split()
+        try:
+            paths = list(self.tk.splitlist(raw))
+        except Exception:
+            if "{" in raw:
+                import re
+                paths = re.findall(r'\{([^}]+)\}', raw)
+            else:
+                paths = raw.split()
 
         all_files = []
         for p in paths:

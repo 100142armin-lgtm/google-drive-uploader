@@ -89,6 +89,15 @@ function doPost(e) {
  * 核心处理逻辑：创建多级目录并向 Google Drive 请求 Resumable Upload URL
  */
 function handlePrepareUpload(payload) {
+  // 0. 可选访问暗号保护 (若脚本属性中设置了 ACCESS_TOKEN，则客户端必须匹配)
+  const requiredToken = PropertiesService.getScriptProperties().getProperty("ACCESS_TOKEN") || "";
+  if (requiredToken) {
+    const clientToken = String(payload.token || payload.access_token || "").trim();
+    if (clientToken !== requiredToken) {
+      throw new Error("401 Unauthorized: 访问暗号不匹配或缺失，已拒绝申请上传通道。");
+    }
+  }
+
   const rootId = getRootFolderId();
   if (!rootId) {
     throw new Error("服务端尚未配置根目录！请在 Code.gs 中填入 DEFAULT_ROOT_FOLDER_ID，或在项目属性中配置 ROOT_FOLDER_ID。");
@@ -182,7 +191,7 @@ function handlePrepareUpload(payload) {
  * 目录查找与创建辅助函数（防止多线程争夺与重复建同名目录）
  */
 function getOrCreateFolder(parent, folderName) {
-  const cleanName = folderName.replace(/[\/\\\r\n\t]/g, "_").trim();
+  const cleanName = String(folderName || "").replace(/[\/\\\r\n\t\0]/g, "_").trim();
   if (!cleanName) return parent;
 
   const folders = parent.getFoldersByName(cleanName);
