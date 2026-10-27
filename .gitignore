@@ -1,0 +1,36 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.whl
+*.bin
+
+# Distribution / packaging
+build/
+dist/
+*.spec.bak
+*.egg-info/
+
+# Local configuration and credentials
+.env
+.env.local
+*.cfg.json
+.gdrive_uploader_client_cfg.json
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE and editors
+.vscode/
+.idea/
+*.swp
+*.swo

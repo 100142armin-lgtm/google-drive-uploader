@@ -1,0 +1,9 @@
+# Google Drive High-Speed Uploader Client Dependencies
+# Locked to secure minimum versions
+
+customtkinter>=6.0.0
+darkdetect>=0.8.0
+pillow>=12.3.0
+requests>=2.34.2
+urllib3>=2.8.0
+tkinterdnd2>=0.5.0
